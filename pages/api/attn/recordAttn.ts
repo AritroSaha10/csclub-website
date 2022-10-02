@@ -7,8 +7,10 @@ import { Timestamp } from "firebase-admin/firestore"
 
 /**
  * All codes:
- * 10 -> Successful.
- * 15 -> Successful, but IP does not match school whitelist
+ * 10 -> Successful, marked as present.
+ * 11 -> Successful, marked as late.
+ * 15 -> Successful, marked as present, IP does not match school whitelist
+ * 16 -> Successful, marked as late, but IP does not match school whitelist
  * 20 -> User cannot sign in more than 1 hour before/after meeting.
  * 22 -> UID is invalid.
  * 24 -> User is not a JFSS student.
@@ -92,7 +94,7 @@ export default async function handler(
 
     // If already exists, user already signed in.
     if ((await userAttnDocRef.get()).exists) {
-        res.status(400).json({ success: false, code: 26 });
+        res.status(418).json({ success: false, code: 26 });
         return;
     }
 
@@ -105,7 +107,8 @@ export default async function handler(
     })
 
     // Increment late/present counters
-    if (timeDelta >= 15 * 60) {
+    const isLate = timeDelta >= 15 * 60;
+    if (isLate) {
         // Consider >=15min late as late
         await attnFullDocRef.update({
             "late": (attnFullDocSnap.data()?.late || 0) + 1
@@ -121,8 +124,8 @@ export default async function handler(
 
     // Everything went successfully! Send user success code
     if (isGoodIP) {
-        res.status(200).json({ success: true, code: 10 });
+        res.status(200).json({ success: true, code: 10 + Number(isLate) });
     } else {
-        res.status(200).json({ success: true, code: 15 });
+        res.status(200).json({ success: true, code: 15 + Number(isLate) });
     }
 }
