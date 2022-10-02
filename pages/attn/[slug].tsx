@@ -3,7 +3,7 @@ import type { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import auth from 'util/firebase/auth'
-import db from 'util/firebase/db'
+import adminFirestore from 'util/firebase/admin/db';
 
 import axios, { AxiosError } from "axios"
 
@@ -178,19 +178,21 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { slug = "" } = context.params;
+    const attnId = slug.replace(/\//g, "");
 
     // Get reference to possible attendance doc
-    const datesDocSnap = await getDoc(doc(db, "attendance", slug));
+    const attnFullDocRef = adminFirestore.doc(`attendance/${attnId}`);
+    const attnFullDocSnap = await attnFullDocRef.get();
 
     // Make sure it exists
-    if (!datesDocSnap.exists()) {
+    if (!attnFullDocSnap.exists) {
         return {
             notFound: true
         }
     }
 
     // Get date object from date dov
-    const attnDate = new Date(datesDocSnap.data()?.date.seconds * 1000);
+    const attnDate = new Date(attnFullDocSnap.data()?.date.seconds * 1000);
 
     // Only allow sign ins 1 hour before and after actual date
     const currentDate = Date.now()
