@@ -175,6 +175,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    // @ts-ignore I honestly don't know why this errors out, since I'm pretty sure it's normal syntax.
     const { slug = "" } = context.params;
     const attnId = slug.replace(/\//g, "");
 
