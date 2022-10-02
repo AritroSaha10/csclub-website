@@ -99,7 +99,6 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     }, [])
 
     // If it's too late to sign in, let them know
-    /*
     if (!signInAllowed) {
         return (
             <div>
@@ -108,7 +107,6 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
             </div>
         )
     }
-    */
 
     if (user.displayName && !user.displayName.includes("John Fraser SS")) {
         return (
