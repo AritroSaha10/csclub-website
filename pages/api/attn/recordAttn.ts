@@ -98,17 +98,20 @@ export default async function handler(
         res.status(418).json({ success: false, code: 26 });
         return;
     }
+    
+    // Determine whether user is late or not
+    const isLate = timeDeltaNoAbs >= 15 * 60;
 
     // Create attn record
     await userAttnDocRef.create({
         "ip_addr": clientIp,
         "is_good_ip": isGoodIP,
         "student_number": studentNumber,
-        "time": Timestamp.now()
+        "time": Timestamp.now(),
+        "late": isLate
     })
 
     // Increment late/present counters
-    const isLate = timeDeltaNoAbs >= 15 * 60;
     if (isLate) {
         // Consider >=15min late as late
         await attnFullDocRef.update({
