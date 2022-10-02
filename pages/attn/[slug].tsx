@@ -48,6 +48,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     const [loadingAuth, setLoadingAuth] = useState(true)
     const [user, setUser] = useState<{[key: string]: any}>({});
     const [serverRes, setServerRes] = useState<{[key: string]: any}>({});
+    const [sendingAttn, setSendingAttn] = useState(false);
 
     const signIn = () => {
         // Prompt user to log in
@@ -64,6 +65,8 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     }
 
     const sendAttnRecReq = async () => {
+        setSendingAttn(true)
+
         try {
             // Send request to server
             const res = await axios.post("/api/attn/recordAttn", {
@@ -83,6 +86,8 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                 "statusCode": error.response.status
             })
         }
+
+        setSendingAttn(false)
     }
 
     useEffect(() => {
@@ -126,8 +131,9 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                 return (
                     <div>
                         <p>Signed in as {user.email}</p>
-                        <button onClick={() => sendAttnRecReq()}>Confirm Attendance</button>
+                        {!sendingAttn && <button onClick={() => sendAttnRecReq()}>Confirm Attendance</button>}
                         <button onClick={() => signOut(auth)}>Sign out</button>
+                        {sendingAttn && <p>Please wait...</p>}
                     </div>
                 )
             } else {
@@ -141,7 +147,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                         second: "2-digit"
                     })
 
-                    const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 11) ? "present" : "late";
+                    const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 15) ? "present" : "late";
                     return (
                         <div>
                             <h1>200 OK</h1>
