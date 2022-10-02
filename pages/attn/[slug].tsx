@@ -10,6 +10,8 @@ import axios, { AxiosError } from "axios"
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect, setPersistence, browserLocalPersistence, getRedirectResult, signOut } from "firebase/auth";
 import { useEffect, useState } from 'react'
 
+import Link from "next/link"
+
 interface PageProps {
     timestamp: number,
     signInAllowed: boolean,
@@ -46,9 +48,18 @@ const resCodeMapping = {
 const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId }) => {
     const attnDate = new Date(timestamp);
     const [loadingAuth, setLoadingAuth] = useState(true)
-    const [user, setUser] = useState<{[key: string]: any}>({});
-    const [serverRes, setServerRes] = useState<{[key: string]: any}>({});
+    const [user, setUser] = useState<{ [key: string]: any }>({});
+    const [serverRes, setServerRes] = useState<{ [key: string]: any }>({});
     const [sendingAttn, setSendingAttn] = useState(false);
+
+    const dateString = attnDate.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    })
 
     const signIn = () => {
         // Prompt user to log in
@@ -63,6 +74,37 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
             return signInWithRedirect(auth, authProvider)
         })
     }
+
+    const StatusCodePage = ({ title, content }: { title: string, content: string }) => (
+        <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col p-8 items-center">
+                <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                    {title}
+                </h2>
+
+                <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                    {content}
+                </p>
+
+                <div className='flex flex-wrap gap-4'>
+                    <Link href="/attn">
+                        <a
+                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                        >
+                            Go back
+                        </a>
+                    </Link>
+
+                    <button
+                        onClick={() => signOut(auth)}
+                        className="py-2 px-5 bg-red-600 hover:bg-red-800 duration-150 text-xl font-medium text-white rounded-lg"
+                    >
+                        Sign out
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
 
     const sendAttnRecReq = async () => {
         setSendingAttn(true)
@@ -106,52 +148,113 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     // If it's too late to sign in, let them know
     if (!signInAllowed) {
         return (
-            <div>
-                <h1>403 Forbidden</h1>
-                <p>You are not allowed to sign in more than one hour earlier / later from a meeting time. If you are early, please try again later.</p>
+            <div className="flex flex-col flex-grow justify-center">
+                <div className="flex flex-col p-8 items-center">
+                    <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                        403 Forbidden
+                    </h2>
+
+                    <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                        You are not allowed to sign in more than one hour earlier / later from a meeting time. If you are early, please try again later.
+                    </p>
+
+                    <Link href="/attn">
+                        <a
+                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                        >
+                            Go back
+                        </a>
+                    </Link>
+                </div>
             </div>
         )
     }
 
     if (user.displayName && !user.displayName.includes("John Fraser SS")) {
         return (
-            <div>
-                <h1>403 Forbidden</h1>
-                <p>You must be from John Fraser SS in order to sign in.</p>
-                <button onClick={() => signOut(auth)}>Sign out</button>
-            </div>
+            <StatusCodePage {...resCodeMapping[24]} />
         )
     }
 
     if (loadingAuth) {
-        return <>Loading...</>
-    } else {        
+        return (
+            <div className="flex flex-col flex-grow justify-center">
+                <div className="flex flex-col p-8 items-center">
+                    <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                        Loading...
+                    </h2>
+                </div>
+            </div>
+        )
+    } else {
         if (user && Object.keys(user).length !== 0) {
             if (Object.keys(serverRes).length === 0) {
                 return (
-                    <div>
-                        <p>Signed in as {user.email}</p>
-                        {!sendingAttn && <button onClick={() => sendAttnRecReq()}>Confirm Attendance</button>}
-                        <button onClick={() => signOut(auth)}>Sign out</button>
-                        {sendingAttn && <p>Please wait...</p>}
+                    <div className="flex flex-col flex-grow justify-center">
+                        <div className="flex flex-col p-8 items-center">
+                            <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                                Attendance Page
+                            </h2>
+
+                            <p className="text-2xl text-center mb-2 text-gray-700 dark:text-gray-300 lg:w-1/2">Signed in as {user.email}</p>
+                            <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">Meeting Date: {dateString}</p>
+
+                            <div className='flex flex-wrap gap-4'>
+                                {!sendingAttn && (
+                                    <>
+                                        <button
+                                            onClick={() => sendAttnRecReq()}
+                                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                        >
+                                            Confirm Attendance
+                                        </button>
+
+                                        <button
+                                            onClick={() => signOut(auth)}
+                                            className="py-2 px-5 bg-red-600 hover:bg-red-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                        >
+                                            Sign out
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+
+                            {sendingAttn && <p className='text-xl text-gray-300'>Checking you in...</p>}
+                        </div>
                     </div>
                 )
             } else {
                 if (serverRes.statusCode === 200) {
-                    const dateString = attnDate.toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit"
-                    })
-
                     const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 15) ? "present" : "late";
                     return (
-                        <div>
-                            <h1>200 OK</h1>
-                            <p>You&apos;ve been marked as <b>{latePresentText}</b> for the meeting on {dateString}.</p>
+
+                        <div className="flex flex-col flex-grow justify-center">
+                            <div className="flex flex-col p-8 items-center">
+                                <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                                    200 OK
+                                </h2>
+
+                                <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                                    You&apos;ve been marked as <b>{latePresentText}</b> for the meeting on {dateString}.
+                                </p>
+
+                                <div className='flex flex-wrap gap-4'>
+                                    <Link href="/">
+                                        <a
+                                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                        >
+                                            Go home
+                                        </a>
+                                    </Link>
+
+                                    <button
+                                        onClick={() => signOut(auth)}
+                                        className="py-2 px-5 bg-red-600 hover:bg-red-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                    >
+                                        Sign out
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )
                 } else {
@@ -160,20 +263,29 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                     const resCodeData = resCodeMapping[x];
 
                     return (
-                        <div>
-                            <h1>{resCodeData.title}</h1>
-                            <p>{resCodeData.content}</p>
-                            <button onClick={() => signOut(auth)}>Sign out</button>
-                        </div>
+                        <StatusCodePage {...resCodeData} />
                     )
                 }
             }
         } else {
             return (
-                <div>
-                    <h1>401 Unauthorized</h1>
-                    <p>You must sign in with a PDSB account to access this page.</p>
-                    <button onClick={() => signIn()}>Sign in</button>
+                <div className="flex flex-col flex-grow justify-center">
+                    <div className="flex flex-col p-8 items-center">
+                        <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                            401 Unauthorized
+                        </h2>
+
+                        <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                            You must sign in with a PDSB account to access this page.
+                        </p>
+
+                        {user && <button
+                            onClick={() => signIn()}
+                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                        >
+                            Sign in
+                        </button>}
+                    </div>
                 </div>
             )
         }

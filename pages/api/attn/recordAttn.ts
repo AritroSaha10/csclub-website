@@ -81,6 +81,7 @@ export default async function handler(
     // Get time of meeting from doc
     const meetingTime = new Date(attnFullDocSnap.data()?.date.seconds * 1000);
     const timeDelta = Math.abs(Date.now() - meetingTime.getTime()) / 1000;
+    const timeDeltaNoAbs = (Date.now() - meetingTime.getTime()) / 1000;
 
     // Check whether delta is larger than an hour
     if (timeDelta >= 60 * 60) {
@@ -107,7 +108,7 @@ export default async function handler(
     })
 
     // Increment late/present counters
-    const isLate = timeDelta >= 15 * 60;
+    const isLate = timeDeltaNoAbs >= 15 * 60;
     if (isLate) {
         // Consider >=15min late as late
         await attnFullDocRef.update({
