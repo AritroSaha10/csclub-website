@@ -23,7 +23,7 @@ const contentVariants = {
 }
 
 export default function Layout({ children, noAnim }: { children: ReactNode, noAnim?: boolean }) {
-    const title = `FraserCS`;
+    const title = `JFSS CS Club`;
     const description = "John Fraser SS's one and only Computer Science Club.";
     const imageSrc = "https://frasercodes.vercel.app/images/csclub-logo.png"
 
@@ -38,11 +38,11 @@ export default function Layout({ children, noAnim }: { children: ReactNode, noAn
                 <meta property="og:type" content="website" />
                 <meta property="og:image" content={imageSrc} />
                 <meta property="og:image:type" content="image/png" />
-                <meta property="og:image:width" content="1111" />
-                <meta property="og:image:height" content="1111" />
+                <meta property="og:image:width" content="1784" />
+                <meta property="og:image:height" content="530" />
 
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:creator" content="@YOUR_TWITTER" />
+                <meta name="twitter:creator" content="@johnfrasercsclub" />
                 <meta property="twitter:title" content={title} />
                 <meta property="twitter:description" content={description} />
                 <meta property="twitter:image:src" content={imageSrc} />

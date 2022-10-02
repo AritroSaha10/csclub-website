@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 export default function TitleHead({ name }: { name: string }) {
-    const title = `${name} | FraserCS`;
+    const title = `${name} | JFSS CS Club`;
 
     return (
         <Head>
