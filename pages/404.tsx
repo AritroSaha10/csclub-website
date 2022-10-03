@@ -7,11 +7,11 @@ export default function Page404() {
         <h1 className="text-8xl text-center mb-2 font-semibold text-blue-500">
           404
         </h1>
-        <h2 className="text-3xl text-center mb-6 text-black dark:text-white">
+        <h2 className="text-3xl text-center mb-6 text-white">
           Page Not Found
         </h2>
 
-        <p className="text-xl text-center mb-6 text-gray-700 dark:text-gray-300">
+        <p className="text-xl text-center mb-6 text-gray-300">
           Sorry, the page that you&apos;re looking for does not exist.
         </p>
 
