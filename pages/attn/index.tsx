@@ -29,7 +29,7 @@ const AttendanceIndex: NextPage = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center p-8 min-h-[80vh]">
+        <div className="flex flex-col items-center justify-center p-8 min-h-[80vh]" key="attendance-index">
             <TitleHead name="Home" />
 
             <h1 className="text-4xl text-center mb-2 font-semibold text-white">

@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center p-8 min-h-[80vh]">
+    <div className="flex flex-col items-center justify-center p-8 min-h-[80vh]" key="index-page">
       <TitleHead name="Home" />
 
       <h1 className="text-4xl text-center mb-4 font-semibold text-white">

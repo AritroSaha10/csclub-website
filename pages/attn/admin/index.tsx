@@ -66,7 +66,7 @@ export default function AttendanceAdmin() {
 
     if (loadingAuth) {
         return (
-            <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col flex-grow justify-center" key="attendance-admin-index-loading">
                 <div className="flex flex-col p-8 items-center">
                     <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
                         Loading...
@@ -80,7 +80,7 @@ export default function AttendanceAdmin() {
         if (isAdmin) {
             if (allAttnDocs.length) {
                 return (
-                    <div className='flex flex-col flex-grow p-12'>
+                    <div className='flex flex-col flex-grow p-12' key="attendance-admin-index">
                         <h1 className='text-3xl font-semibold text-white text-center mb-6'>Attendance Tracker</h1>
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                             {allAttnDocs.map((data) => {
@@ -110,7 +110,7 @@ export default function AttendanceAdmin() {
                 )
             } else {
                 return (
-                    <div className="flex flex-col flex-grow justify-center">
+                    <div className="flex flex-col flex-grow justify-center" key="attendance-admin-index-loading">
                         <div className="flex flex-col p-8 items-center">
                             <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
                                 Loading...
@@ -121,7 +121,7 @@ export default function AttendanceAdmin() {
             }
         } else {
             return (
-                <div className="flex flex-col flex-grow justify-center">
+                <div className="flex flex-col flex-grow justify-center" key="attendance-admin-index-403">
                     <div className="flex flex-col p-8 items-center">
                         <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
                             403 Forbidden
@@ -143,7 +143,7 @@ export default function AttendanceAdmin() {
         }
     } else {
         return (
-            <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col flex-grow justify-center" key="attendance-admin-index-401">
                 <div className="flex flex-col p-8 items-center">
                     <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
                         401 Unauthorized

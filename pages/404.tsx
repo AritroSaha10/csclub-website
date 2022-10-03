@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Page404() {
   return (
-    <div className="flex flex-col flex-grow justify-center">
+    <div className="flex flex-col flex-grow justify-center" key="page-404">
       <div className="flex flex-col p-8">
         <h1 className="text-8xl text-center mb-2 font-semibold text-blue-500">
           404

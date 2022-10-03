@@ -148,7 +148,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     // If it's too late to sign in, let them know
     if (!signInAllowed) {
         return (
-            <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col flex-grow justify-center" key="attendance-start-forbidden">
                 <div className="flex flex-col p-8 items-center">
                     <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                         403 Forbidden
@@ -178,7 +178,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
 
     if (loadingAuth) {
         return (
-            <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col flex-grow justify-center" key="attendance-loading">
                 <div className="flex flex-col p-8 items-center">
                     <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                         Loading...
@@ -190,7 +190,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
         if (user && Object.keys(user).length !== 0) {
             if (Object.keys(serverRes).length === 0) {
                 return (
-                    <div className="flex flex-col flex-grow justify-center">
+                    <div className="flex flex-col flex-grow justify-center" key="attendance-confirm">
                         <div className="flex flex-col p-8 items-center">
                             <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                                 Attendance Page
@@ -228,7 +228,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                     const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 15) ? "present" : "late";
                     return (
 
-                        <div className="flex flex-col flex-grow justify-center">
+                        <div className="flex flex-col flex-grow justify-center" key="attendance-ok">
                             <div className="flex flex-col p-8 items-center">
                                 <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                                     200 OK
@@ -269,7 +269,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
             }
         } else {
             return (
-                <div className="flex flex-col flex-grow justify-center">
+                <div className="flex flex-col flex-grow justify-center" key="attendance-401-unauth">
                     <div className="flex flex-col p-8 items-center">
                         <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                             401 Unauthorized
