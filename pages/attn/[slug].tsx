@@ -199,7 +199,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                             <p className="text-2xl text-center mb-2 text-gray-700 dark:text-gray-300 lg:w-1/2">Signed in as {user.email}</p>
                             <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">Meeting Date: {dateString}</p>
 
-                            <div className='flex flex-wrap gap-4'>
+                            <div className='flex flex-wrap gap-4 items-center'>
                                 {!sendingAttn && (
                                     <>
                                         <button
@@ -238,7 +238,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                                     You&apos;ve been marked as <b>{latePresentText}</b> for the meeting on {dateString}.
                                 </p>
 
-                                <div className='flex flex-wrap gap-4'>
+                                <div className='flex flex-wrap gap-4 items-center'>
                                     <Link href="/">
                                         <a
                                             className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
