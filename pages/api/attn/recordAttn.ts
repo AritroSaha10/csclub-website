@@ -23,7 +23,11 @@ type ResponseData = {
 }
 
 const schoolIPs = [
-    "::1"
+    "::1",
+    "205.167.54.",
+    "67.21.152.",
+    "67.21.153.",
+    "67.21.154."
 ]
 
 export default async function handler(
@@ -39,7 +43,7 @@ export default async function handler(
     const clientIp = ((req.headers['x-forwarded-for'] || '') as string).split(',').pop()?.trim() || req.socket.remoteAddress || "";
 
     // Check if IP matches school
-    const isGoodIP = schoolIPs.indexOf(clientIp) != -1;
+    const isGoodIP = schoolIPs.filter(a => clientIp.includes(a)).length === 1
 
     // Get user object from UID
     let userInfo: UserRecord;

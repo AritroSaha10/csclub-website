@@ -78,11 +78,11 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     const StatusCodePage = ({ title, content }: { title: string, content: string }) => (
         <div className="flex flex-col flex-grow justify-center">
             <div className="flex flex-col p-8 items-center">
-                <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                     {title}
                 </h2>
 
-                <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">
                     {content}
                 </p>
 
@@ -148,13 +148,13 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     // If it's too late to sign in, let them know
     if (!signInAllowed) {
         return (
-            <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col flex-grow justify-center" key="attendance-start-forbidden">
                 <div className="flex flex-col p-8 items-center">
-                    <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                    <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                         403 Forbidden
                     </h2>
 
-                    <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                    <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">
                         You are not allowed to sign in more than one hour earlier / later from a meeting time. If you are early, please try again later.
                     </p>
 
@@ -178,9 +178,9 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
 
     if (loadingAuth) {
         return (
-            <div className="flex flex-col flex-grow justify-center">
+            <div className="flex flex-col flex-grow justify-center" key="attendance-loading">
                 <div className="flex flex-col p-8 items-center">
-                    <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                    <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                         Loading...
                     </h2>
                 </div>
@@ -190,14 +190,14 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
         if (user && Object.keys(user).length !== 0) {
             if (Object.keys(serverRes).length === 0) {
                 return (
-                    <div className="flex flex-col flex-grow justify-center">
+                    <div className="flex flex-col flex-grow justify-center" key="attendance-confirm">
                         <div className="flex flex-col p-8 items-center">
-                            <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                            <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                                 Attendance Page
                             </h2>
 
-                            <p className="text-2xl text-center mb-2 text-gray-700 dark:text-gray-300 lg:w-1/2">Signed in as {user.email}</p>
-                            <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">Meeting Date: {dateString}</p>
+                            <p className="text-2xl text-center mb-2 text-gray-300 lg:w-1/2">Signed in as {user.email}</p>
+                            <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">Meeting Date: {dateString}</p>
 
                             <div className='flex flex-wrap gap-4 items-center'>
                                 {!sendingAttn && (
@@ -228,13 +228,13 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                     const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 15) ? "present" : "late";
                     return (
 
-                        <div className="flex flex-col flex-grow justify-center">
+                        <div className="flex flex-col flex-grow justify-center" key="attendance-ok">
                             <div className="flex flex-col p-8 items-center">
-                                <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                                <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                                     200 OK
                                 </h2>
 
-                                <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                                <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">
                                     You&apos;ve been marked as <b>{latePresentText}</b> for the meeting on {dateString}.
                                 </p>
 
@@ -269,13 +269,13 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
             }
         } else {
             return (
-                <div className="flex flex-col flex-grow justify-center">
+                <div className="flex flex-col flex-grow justify-center" key="attendance-401-unauth">
                     <div className="flex flex-col p-8 items-center">
-                        <h2 className="text-5xl font-semibold text-center mb-6 text-black dark:text-white">
+                        <h2 className="text-5xl font-semibold text-center mb-6 text-white">
                             401 Unauthorized
                         </h2>
 
-                        <p className="text-2xl text-center mb-6 text-gray-700 dark:text-gray-300 lg:w-1/2">
+                        <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">
                             You must sign in with a PDSB account to access this page.
                         </p>
 
