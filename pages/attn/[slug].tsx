@@ -224,10 +224,11 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                     </div>
                 )
             } else {
-                if (serverRes.statusCode === 200) {
-                    const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 15) ? "present" : "late";
-                    return (
+                // Present or Late page
+                if (serverRes.statusCode === 200 && serverRes.data?.code !== 18) {
+                    const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 11) ? "present" : "late";
 
+                    return (
                         <div className="flex flex-col flex-grow justify-center" key="attendance-ok">
                             <div className="flex flex-col p-8 items-center">
                                 <h2 className="text-5xl font-semibold text-center mb-6 text-white">
@@ -236,6 +237,39 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
 
                                 <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">
                                     You&apos;ve been marked as <b>{latePresentText}</b> for the meeting on {dateString}.
+                                </p>
+
+                                <div className='flex flex-wrap gap-4 items-center'>
+                                    <Link href="/">
+                                        <a
+                                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                        >
+                                            Go home
+                                        </a>
+                                    </Link>
+
+                                    <button
+                                        onClick={() => signOut(auth)}
+                                        className="py-2 px-5 bg-red-600 hover:bg-red-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                    >
+                                        Sign out
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                } 
+                // Excused absence page
+                else if (serverRes.statusCode === 200 && serverRes.data?.code === 18) {
+                    return (
+                        <div className="flex flex-col flex-grow justify-center" key="attendance-ok">
+                            <div className="flex flex-col p-8 items-center">
+                                <h2 className="text-5xl font-semibold text-center mb-6 text-white">
+                                    200 OK
+                                </h2>
+
+                                <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">
+                                    You&apos;ve been marked as having an <b>excused absence</b> for the meeting on {dateString}.
                                 </p>
 
                                 <div className='flex flex-wrap gap-4 items-center'>

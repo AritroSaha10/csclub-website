@@ -12,7 +12,6 @@ import { Timestamp } from "firebase-admin/firestore"
  * 15 -> Successful, marked as late.
  * 16 -> Successful, marked as late, but IP does not match school whitelist.
  * 18 -> Successful, marked as excused absence.
- * 19 -> Successful, marked as excused absence, but IP does not match school whitelist.
  * 
  * 20 -> User cannot sign in more than 1 hour before/after start of meeting.
  * 21 -> User cannot file an excused absence 1 hour after meeting.
@@ -104,8 +103,8 @@ export default async function handler(
         res.status(403).json({ success: false, code: 20 });
         return;
     } 
-    // Don't allow people to file excused absence after end of meeting
-    else if (timeDeltaNoAbs >= 60 * 60 && isExcusedAbsence) {
+    // Don't allow people to file excused absence after start of meeting (TODO: Change this? You should probably file one earlier)
+    else if (timeDeltaNoAbs >= 0 && isExcusedAbsence) {
         console.warn(`User ${studentNumber} attempted to file excused absence after ${timeDelta} seconds of start of meeting. Ignoring...`);
         res.status(403).json({ success: false, code: 21 });
         return;
