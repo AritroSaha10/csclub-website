@@ -71,7 +71,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                 "hd": "pdsb.net" // Only allow users part of pdsb.net organization
             })
 
-            return signInWithRedirect(auth, authProvider)
+            return signInWithPopup(auth, authProvider)
         })
     }
 

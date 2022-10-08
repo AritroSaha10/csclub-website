@@ -5,7 +5,7 @@ import Hero from 'components/Home/Hero'
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center p-8 min-h-[80vh]" key="index-page">
+    <div className="flex flex-col items-center justify-center min-h-[80vh]" key="index-page">
       <TitleHead name="Home" />
 
       <Hero />
