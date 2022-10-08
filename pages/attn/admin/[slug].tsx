@@ -108,7 +108,7 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                         <h1 className='text-3xl font-semibold text-white text-center mb-6'>Attendance for {dateString}</h1>
 
                         <h2 className='text-2xl text-gray-300 mb-3 text-center'>Present: {attnData.present}</h2>
-                        <div className='flex flex-wrap items-center gap-4 mb-6'>
+                        <div className='flex flex-wrap items-center justify-center gap-4 mb-6'>
                             {attnData.entries.filter((data: any) => !data.late).map((data: any) => {
                                 const signInTime = new Date(data.time.seconds * 1000);
                                 const timeString = signInTime.toLocaleTimeString("en-US", {
@@ -138,7 +138,7 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                         </div>
 
                         <h2 className='text-2xl text-gray-300 mb-3 text-center'>Late: {attnData.late}</h2>
-                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
+                        <div className='flex flex-wrap items-center justify-center gap-4 mb-6'>
                             {attnData.entries.filter((data: any) => data.late).map((data: any) => {
                                 const signInTime = new Date(data.time.seconds * 1000);
                                 const timeString = signInTime.toLocaleTimeString("en-US", {
