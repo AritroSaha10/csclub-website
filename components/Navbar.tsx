@@ -21,6 +21,12 @@ const links = [
         priority: false
     },
     {
+        name: "attendance",
+        link: "/attn",
+        id: "attendance",
+        priority: false
+    },
+    {
         name: "archive",
         link: "/archive",
         id: "archive",
