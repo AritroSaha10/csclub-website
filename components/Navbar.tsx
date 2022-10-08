@@ -50,7 +50,7 @@ export default function Header() {
     const [showDropdown, setShowDropdown] = useState(false);
 
     return (
-        <header className="bg-[#131313] py-2 lg:py-4 sticky">
+        <header className="bg-[#131313] py-2 lg:py-4 sticky z-[9999999999]">
             <div className="container px-4 mx-auto lg:flex lg:items-center">
                 <div className="flex justify-between items-center">
                     <Link href="/">
