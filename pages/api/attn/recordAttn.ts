@@ -8,13 +8,18 @@ import { Timestamp } from "firebase-admin/firestore"
 /**
  * All codes:
  * 10 -> Successful, marked as present.
- * 11 -> Successful, marked as late.
- * 15 -> Successful, marked as present, IP does not match school whitelist
- * 16 -> Successful, marked as late, but IP does not match school whitelist
- * 20 -> User cannot sign in more than 1 hour before/after meeting.
+ * 11 -> Successful, marked as present, but IP does not match school whitelist.
+ * 15 -> Successful, marked as late.
+ * 16 -> Successful, marked as late, but IP does not match school whitelist.
+ * 18 -> Successful, marked as excused absence.
+ * 19 -> Successful, marked as excused absence, but IP does not match school whitelist.
+ * 
+ * 20 -> User cannot sign in more than 1 hour before/after start of meeting.
+ * 21 -> User cannot file an excused absence 1 hour after meeting.
  * 22 -> UID is invalid.
  * 24 -> User is not a JFSS student.
  * 26 -> User has already checked in. 
+ * 
  * 30 -> Invalid attendance ID.
  */
 type ResponseData = {
@@ -27,7 +32,8 @@ const schoolIPs = [
     "205.167.54.",
     "67.21.152.",
     "67.21.153.",
-    "67.21.154."
+    "67.21.154.",
+    "67.21.155."
 ]
 
 export default async function handler(
@@ -40,10 +46,14 @@ export default async function handler(
         return;
     }
 
+    // Get user's IP
     const clientIp = ((req.headers['x-forwarded-for'] || '') as string).split(',').pop()?.trim() || req.socket.remoteAddress || "";
 
     // Check if IP matches school
     const isGoodIP = schoolIPs.filter(a => clientIp.includes(a)).length === 1
+
+    // Store whether this is an excused absence entry 
+    const isExcusedAbsence = !!req.body.excused_absence;
 
     // Get user object from UID
     let userInfo: UserRecord;
@@ -88,9 +98,16 @@ export default async function handler(
     const timeDeltaNoAbs = (Date.now() - meetingTime.getTime()) / 1000;
 
     // Check whether delta is larger than an hour
-    if (timeDelta >= 60 * 60) {
+    // Only stop them if they're not filing an excused absence
+    if (timeDelta >= 60 * 60 && !isExcusedAbsence) {
         console.warn(`User ${studentNumber} attempted to sign-in after ${timeDelta} seconds. Ignoring...`);
         res.status(403).json({ success: false, code: 20 });
+        return;
+    } 
+    // Don't allow people to file excused absence after end of meeting
+    else if (timeDeltaNoAbs >= 60 * 60 && isExcusedAbsence) {
+        console.warn(`User ${studentNumber} attempted to file excused absence after ${timeDelta} seconds of start of meeting. Ignoring...`);
+        res.status(403).json({ success: false, code: 21 });
         return;
     }
 
@@ -99,6 +116,7 @@ export default async function handler(
 
     // If already exists, user already signed in.
     if ((await userAttnDocRef.get()).exists) {
+        console.warn(`User ${studentNumber} already signed in before. Ignoring...`);
         res.status(418).json({ success: false, code: 26 });
         return;
     }
@@ -112,28 +130,36 @@ export default async function handler(
         "is_good_ip": isGoodIP,
         "student_number": studentNumber,
         "time": Timestamp.now(),
-        "late": isLate
+        "late": isLate,
+        "excused_absence": isExcusedAbsence
     })
 
-    // Increment late/present counters
-    if (isLate) {
+    // Increment absent/late/present counters
+    if (isExcusedAbsence) {
+        // Put under excused absence
+        await attnFullDocRef.update({
+            "excused": (attnFullDocSnap.data()?.excused || 0) + 1
+        });
+
+        // Send response to user
+        res.status(200).json({ success: true, code: 18 + Number(!isGoodIP) });
+    } else if (isLate) {
         // Consider >=15min late as late
         await attnFullDocRef.update({
             "late": (attnFullDocSnap.data()?.late || 0) + 1
-        })
+        });
+
+        // Send response to user
+        res.status(200).json({ success: true, code: 15 + Number(!isGoodIP) });
     } else {
         // Otherwise, present
         await attnFullDocRef.update({
             "present": (attnFullDocSnap.data()?.present || 0) + 1
-        })
+        });
+
+        // Send response to user
+        res.status(200).json({ success: true, code: 10 + Number(!isGoodIP) });
     }
 
-    // TODO: Integration with Google Sheets
-
-    // Everything went successfully! Send user success code
-    if (isGoodIP) {
-        res.status(200).json({ success: true, code: 10 + Number(isLate) });
-    } else {
-        res.status(200).json({ success: true, code: 15 + Number(isLate) });
-    }
+    // TODO: Integration with Google Sheets???
 }
