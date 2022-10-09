@@ -98,6 +98,7 @@ export default function AttendanceAdmin() {
                                                 <h2 className='text-2xl font-medium text-white mb-2'>{dateString}</h2>
                                                 <p className='text-lg text-gray-300'>Present: {data.present}</p>
                                                 <p className='text-lg text-gray-300 mb-4'>Late: {data.late}</p>
+                                                <p className='text-lg text-gray-300 mb-4'>Late: {data.excused || 0}</p>
 
                                                 <p className='text-sm text-gray-300'>Click on me for more info...</p>
                                             </div>
