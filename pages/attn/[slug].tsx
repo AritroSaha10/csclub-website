@@ -68,8 +68,8 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, excused
             const authProvider = new GoogleAuthProvider();
 
             authProvider.setCustomParameters({
-                "login_hint": "123456@pdsb.net",
-                "hd": "pdsb.net" // Only allow users part of pdsb.net organization
+                login_hint: "000000@pdsb.net",
+                hd: "pdsb.net" // Only allow users part of pdsb.net organization
             })
 
             return signInWithPopup(auth, authProvider)
