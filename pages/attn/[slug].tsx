@@ -344,10 +344,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { slug = "" } = context.params;
     const attnId = slug.replace(/\//g, "");
 
+    // Record starting time for attendance doc fetch
+    const startingTime = new Date();
+    
     // Get reference to possible attendance doc
     const attnFullDocRef = adminFirestore.doc(`attendance/${attnId}`);
     const attnFullDocSnap = await attnFullDocRef.get();
 
+    // Log time to fetch doc
+    console.info(`Time to fetch attendance data: ${(Date.now() - startingTime.getTime()) / 1000}s`)
+    
     // Make sure it exists
     if (!attnFullDocSnap.exists) {
         return {
