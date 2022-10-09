@@ -109,7 +109,7 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
 
                         <h2 className='text-2xl text-gray-300 mb-3 text-center'>Present: {attnData.present}</h2>
                         <div className='flex flex-wrap items-center justify-center gap-4 mb-6'>
-                            {attnData.entries.filter((data: any) => !data.late).map((data: any) => {
+                            {attnData.entries.filter((data: any) => !data.late && !data.excused_absence).map((data: any) => {
                                 const signInTime = new Date(data.time.seconds * 1000);
                                 const timeString = signInTime.toLocaleTimeString("en-US", {
                                     hour: '2-digit',
@@ -139,7 +139,7 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
 
                         <h2 className='text-2xl text-gray-300 mb-3 text-center'>Late: {attnData.late}</h2>
                         <div className='flex flex-wrap items-center justify-center gap-4 mb-6'>
-                            {attnData.entries.filter((data: any) => data.late).map((data: any) => {
+                            {attnData.entries.filter((data: any) => data.late && !data.excused_absence).map((data: any) => {
                                 const signInTime = new Date(data.time.seconds * 1000);
                                 const timeString = signInTime.toLocaleTimeString("en-US", {
                                     hour: '2-digit',
@@ -167,7 +167,35 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                             })}
                         </div>
 
+                        <h2 className='text-2xl text-gray-300 mb-3 text-center'>Excused Absences: {attnData.excused || 0}</h2>
+                        <div className='flex flex-wrap items-center justify-center gap-4 mb-6'>
+                            {attnData.entries.filter((data: any) => data.excused_absence).map((data: any) => {
+                                const signInTime = new Date(data.time.seconds * 1000);
+                                const timeString = signInTime.toLocaleTimeString("en-US", {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit'
+                                })
 
+                                return (
+                                    <div className='p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
+                                        <h3 className='text-xl font-medium text-white mb-2'>
+                                            {data.student_number}
+                                        </h3>
+
+                                        <div>
+                                            <p className="text-md text-gray-300">
+                                                <span className="font-semibold text-gray-300">IP Address:</span> {data.ip_addr}
+                                            </p>
+
+                                            <p className="text-md text-gray-300">
+                                                <span className='font-semibold'>Submission time:</span> {timeString}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                 )
             } else {
