@@ -238,7 +238,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, excused
                 )
             } else {
                 // Present or Late page
-                if (serverRes.statusCode === 200 && serverRes.data?.code !== 18) {
+                if (serverRes.statusCode === 200 && !([18, 19].includes(serverRes.data?.code))) {
                     const latePresentText = (serverRes.data?.code === 10 || serverRes.data?.code === 11) ? "present" : "late";
 
                     return (
