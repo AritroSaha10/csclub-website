@@ -43,7 +43,7 @@ const AttendanceIndex: NextPage = () => {
             <div>
                 <form className="flex flex-col sm:flex-row items-center gap-2 mt-4" onSubmit={handleSubmit} noValidate>
                     <input
-                        className={`rounded-lg py-2 px-3 w-60 sm:w-72 align-middle text-black outline-none focus:ring-2 focus:ring-blue-700 duration-200 bg-white/40 shadow-lg focus:shadow-none ${invalidAttnCode && "ring-1 ring-red-600"}`}
+                        className={`rounded-lg py-2 px-3 w-60 sm:w-72 align-middle text-white outline-none focus:ring-2 focus:ring-blue-700 duration-200 bg-white/20 shadow-lg focus:shadow-none ${invalidAttnCode && "ring-1 ring-red-600"}`}
                         placeholder="Attendance code"
                         name="attnCode"
                         onChange={() => setInvalidAttnCode(false)}

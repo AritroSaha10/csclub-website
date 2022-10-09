@@ -15,6 +15,7 @@ import Link from "next/link"
 interface PageProps {
     timestamp: number,
     signInAllowed: boolean,
+    excusedAbsenceAllowed: boolean,
     attnId: string
 }
 
@@ -45,7 +46,7 @@ const resCodeMapping = {
     }
 }
 
-const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId }) => {
+const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, excusedAbsenceAllowed, attnId, }) => {
     const attnDate = new Date(timestamp);
     const [loadingAuth, setLoadingAuth] = useState(true)
     const [user, setUser] = useState<{ [key: string]: any }>({});
@@ -106,14 +107,15 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
         </div>
     )
 
-    const sendAttnRecReq = async () => {
+    const sendAttnRecReq = async (excusedAbsence: boolean) => {
         setSendingAttn(true)
 
         try {
             // Send request to server
             const res = await axios.post("/api/attn/recordAttn", {
                 "uid": user.uid,
-                "attn_id": attnId
+                "attn_id": attnId,
+                "excused_absence": !!excusedAbsence
             });
 
             // Get response and status code, update state
@@ -146,7 +148,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
     }, [])
 
     // If it's too late to sign in, let them know
-    if (!signInAllowed) {
+    if (!signInAllowed && !excusedAbsenceAllowed) {
         return (
             <div className="flex flex-col flex-grow justify-center" key="attendance-start-forbidden">
                 <div className="flex flex-col p-8 items-center">
@@ -202,12 +204,23 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                             <div className='flex flex-wrap gap-4 items-center'>
                                 {!sendingAttn && (
                                     <>
-                                        <button
-                                            onClick={() => sendAttnRecReq()}
-                                            className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
-                                        >
-                                            Confirm Attendance
-                                        </button>
+                                        {signInAllowed && (
+                                            <button
+                                                onClick={() => sendAttnRecReq(false)}
+                                                className="py-2 px-5 bg-blue-600 hover:bg-blue-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                            >
+                                                Confirm Attendance
+                                            </button>
+                                        )}
+
+                                        {excusedAbsenceAllowed && (
+                                            <button
+                                                onClick={() => sendAttnRecReq(true)}
+                                                className="py-2 px-5 bg-yellow-600 hover:bg-yellow-800 duration-150 text-xl font-medium text-white rounded-lg"
+                                            >
+                                                Confirm Excused Absence
+                                            </button>
+                                        )}
 
                                         <button
                                             onClick={() => signOut(auth)}
@@ -258,7 +271,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, attnId 
                             </div>
                         </div>
                     )
-                } 
+                }
                 // Excused absence page
                 else if (serverRes.statusCode === 200 && serverRes.data?.code === 18) {
                     return (
@@ -348,13 +361,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // Only allow sign ins 1 hour before and after actual date
     const currentDate = Date.now()
     const timeDelta = Math.abs(currentDate - attnDate.getTime()) / 1000
+    const timeDeltaNoAbs = (currentDate - attnDate.getTime()) / 1000
 
     let signInAllowed = timeDelta <= 60 * 60;
+
+    // Only allow excused absences at least 1 hour before meeting date
+    let excusedAbsenceAllowed = timeDeltaNoAbs <= -60 * 60;
 
     return {
         props: {
             timestamp: attnDate.getTime(),
             signInAllowed,
+            excusedAbsenceAllowed,
             attnId: slug
         }
     }

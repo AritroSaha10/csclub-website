@@ -103,8 +103,8 @@ export default async function handler(
         res.status(403).json({ success: false, code: 20 });
         return;
     } 
-    // Don't allow people to file excused absence after start of meeting (TODO: Change this? You should probably file one earlier)
-    else if (timeDeltaNoAbs >= 0 && isExcusedAbsence) {
+    // Don't allow people to file excused absence before one hour of meeting
+    else if (timeDeltaNoAbs >= -60 * 60 && isExcusedAbsence) {
         console.warn(`User ${studentNumber} attempted to file excused absence after ${timeDelta} seconds of start of meeting. Ignoring...`);
         res.status(403).json({ success: false, code: 21 });
         return;
