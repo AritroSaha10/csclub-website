@@ -273,7 +273,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, excused
                     )
                 }
                 // Excused absence page
-                else if (serverRes.statusCode === 200 && serverRes.data?.code === 18) {
+                else if (serverRes.statusCode === 200 && [18, 19].includes(serverRes.data?.code)) {
                     return (
                         <div className="flex flex-col flex-grow justify-center" key="attendance-ok">
                             <div className="flex flex-col p-8 items-center">
@@ -306,8 +306,8 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, excused
                     )
                 } else {
                     // Server intentionally sent error
-                    const x = (serverRes.data?.code || -1) as (20 | 22 | 24 | 26 | -1)
-                    const resCodeData = resCodeMapping[x];
+                    const x = serverRes.data?.code as (20 | 22 | 24 | 26)
+                    const resCodeData = resCodeMapping[x] || resCodeMapping[-1];
 
                     return (
                         <StatusCodePage {...resCodeData} />
