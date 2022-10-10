@@ -201,7 +201,7 @@ const AttendancePage: NextPage<PageProps> = ({ timestamp, signInAllowed, excused
                             <p className="text-2xl text-center mb-2 text-gray-300 lg:w-1/2">Signed in as {user.email}</p>
                             <p className="text-2xl text-center mb-6 text-gray-300 lg:w-1/2">Meeting Date: {dateString}</p>
 
-                            <div className='flex flex-wrap gap-4 items-center'>
+                            <div className='flex flex-wrap gap-4 items-center justify-center'>
                                 {!sendingAttn && (
                                     <>
                                         {signInAllowed && (
