@@ -118,10 +118,19 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                                 })
 
                                 return (
-                                    <div className='p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
-                                        <h3 className='text-xl font-medium text-white mb-2'>
-                                            {data.student_number}
-                                        </h3>
+                                    <div className='flex flex-col gap-3 items-center p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
+                                        <div>
+                                            <h3 className='text-xl font-medium text-white'>
+                                                {data.student_number}
+                                            </h3>
+
+                                            {data.user_info && (
+                                                <div className="flex flex-row gap-1 text-sm text-gray-300 items-center">
+                                                    <Image src={data.user_info.photo_url} alt="pfp" height={25} width={25} className="rounded-full" quality={100} />
+                                                    <span>{data.user_info.display_name.replace(" John Fraser SS", "").replace(data.student_number, "")}</span>
+                                                </div>
+                                            )}
+                                        </div>
 
                                         <div>
                                             <p className="text-md text-gray-300">
@@ -148,10 +157,19 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                                 })
 
                                 return (
-                                    <div className='p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
-                                        <h3 className='text-xl font-medium text-white mb-2'>
-                                            {data.student_number}
-                                        </h3>
+                                    <div className='flex flex-col gap-3 items-center p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
+                                        <div>
+                                            <h3 className='text-xl font-medium text-white'>
+                                                {data.student_number}
+                                            </h3>
+
+                                            {data.user_info && (
+                                                <div className="flex flex-row gap-1 text-sm text-gray-300 items-center">
+                                                    <Image src={data.user_info.photo_url} alt="pfp" height={25} width={25} className="rounded-full" quality={100} />
+                                                    <span>{data.user_info.display_name.replace(" John Fraser SS", "").replace(data.student_number, "")}</span>
+                                                </div>
+                                            )}
+                                        </div>
 
                                         <div>
                                             <p className="text-md text-gray-300">
@@ -178,10 +196,19 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                                 })
 
                                 return (
-                                    <div className='p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
-                                        <h3 className='text-xl font-medium text-white mb-2'>
-                                            {data.student_number}
-                                        </h3>
+                                    <div className='flex flex-col gap-3 items-center p-4 bg-gray-700 text-center rounded-md' key={data.student_number}>
+                                        <div>
+                                            <h3 className='text-xl font-medium text-white'>
+                                                {data.student_number}
+                                            </h3>
+
+                                            {data.user_info && (
+                                                <div className="flex flex-row gap-1 text-sm text-gray-300 items-center">
+                                                    <Image src={data.user_info.photo_url} alt="pfp" height={25} width={25} className="rounded-full" quality={100} />
+                                                    <span>{data.user_info.display_name.replace(" John Fraser SS", "").replace(data.student_number, "")}</span>
+                                                </div>
+                                            )}
+                                        </div>
 
                                         <div>
                                             <p className="text-md text-gray-300">
