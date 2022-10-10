@@ -126,6 +126,7 @@ export default async function handler(
     // Create attn record
     await userAttnDocRef.create({
         "ip_addr": clientIp,
+        "display_name": userInfo.displayName,
         "is_good_ip": isGoodIP,
         "student_number": studentNumber,
         "time": Timestamp.now(),
