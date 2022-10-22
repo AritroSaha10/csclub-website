@@ -5,6 +5,11 @@ import adminFirestore from 'util/firebase/admin/db';
 import { uuidv4 } from '@firebase/util';
 import { Timestamp } from 'firebase-admin/firestore';
 
+interface ExpectedRequestData {
+    uid: string, // Firebase Auth UID of user
+    attn_date: number // Unix timestamp for the new attendance entry, in milliseconds
+}
+
 /**
  * All codes:
  * 10 -> Successful.
@@ -13,10 +18,18 @@ import { Timestamp } from 'firebase-admin/firestore';
  * 23 -> User is not an admin.
  * 24 -> Invalid timestamp.
  * 25 -> Proposed timestamp should be after the current date.
+ * 
+ * -1 -> Server error.
  */
+interface ResponseData {
+    success: boolean,
+    code: (10 | 22 | 23 | 24 | 25 | -1), 
+    ref?: string // Reference to newly made attendance doc
+}
+
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse<ResponseData>
 ) {
     // Only allow POST requests
     if (req.method !== 'POST') {

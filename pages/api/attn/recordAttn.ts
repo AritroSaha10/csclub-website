@@ -1,9 +1,16 @@
-import adminAuth from 'util/firebase/admin/auth';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { UserRecord } from 'firebase-admin/lib/auth/user-record';
-import { firestore } from 'firebase-admin';
+
+import adminAuth from 'util/firebase/admin/auth';
 import adminFirestore from 'util/firebase/admin/db';
+
+import { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import { Timestamp } from "firebase-admin/firestore"
+
+interface ExpectedRequestData {
+    excused_absence: boolean, 
+    uid: string, // Firebase Auth UID of user
+    attn_id: string // ID of attendance record
+}
 
 /**
  * All codes:
@@ -21,7 +28,7 @@ import { Timestamp } from "firebase-admin/firestore"
  * 
  * 30 -> Invalid attendance ID.
  */
-type ResponseData = {
+interface ResponseData {
     success: boolean,
     code: number
 }

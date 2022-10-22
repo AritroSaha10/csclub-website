@@ -1,16 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import adminFirestore from 'util/firebase/admin/db';
 
-type ResponseData = {
+interface ExpectedRequestData {
+    short: string;
+}
+
+interface ResponseData {
     success: boolean,
     url?: string
 }
 
+// ! NOTE: ONLY MEANT TO BE USED BY MIDDLEWARE
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData>
 ) {
-    console.log()
     const shortened = req.body.short.replace("/shrt/", "").replace(/\//g, "");
 
     // Stop if it's empty
