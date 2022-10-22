@@ -31,7 +31,6 @@ export default async function handler(
     }
 
     // Check whether user is an admin by looking for admin doc ref
-    // !! By using this, anybody with the uid "test" would be able to make new attendance files. Please fix the admin auth implementation in /attn/admin before pushing these changes.
     const adminDocRef = adminFirestore.doc(`/admindata/${req.body.uid}`);
     const adminDocSnap = await adminDocRef.get();
 

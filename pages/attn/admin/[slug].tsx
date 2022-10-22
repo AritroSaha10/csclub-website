@@ -42,7 +42,7 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
 
                 // If they can access this doc, they're an admin
                 try {
-                    await getDoc(doc(db, "admindata", "test"))
+                    await getDoc(doc(db, "admindata", newUser.uid))
                     setIsAdmin(true);
 
                     // Get attendance data
