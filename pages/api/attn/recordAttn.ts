@@ -128,7 +128,7 @@ export default async function handler(
     }
     
     // Determine whether user is late or not
-    const isLate = timeDeltaNoAbs >= 15 * 60;
+    const isLate = timeDeltaNoAbs >= 10 * 60;
 
     // Create attn record
     await userAttnDocRef.create({
