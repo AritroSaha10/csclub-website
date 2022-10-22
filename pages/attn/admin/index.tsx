@@ -11,9 +11,15 @@ import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithRedi
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
+interface AdminData {
+    studentNumber: string,
+    name: string
+}
+
 export default function AttendanceAdmin() {
     const [loadingAuth, setLoadingAuth] = useState(true)
     const [user, setUser] = useState<{ [key: string]: any }>({});
+    const [adminData, setAdminData] = useState<AdminData | undefined>();
     const [isAdmin, setIsAdmin] = useState(false);
     const [allAttnDocs, setAllAttnDocs] = useState<any[]>([]);
 
@@ -37,10 +43,19 @@ export default function AttendanceAdmin() {
                 // Set user data
                 setUser(newUser);
 
-                // If they can access this doc, they're an admin
+                // If they can access their own admin doc, they're an admin
                 try {
-                    await getDoc(doc(db, "admindata", "test"))
+                    // Get the admin's data if they exist as one
+                    const newAdminData = await getDoc(doc(db, "admindata", newUser.uid));
+
+                    // Make sure the document actually exists
+                    if (!newAdminData.exists()) {
+                        throw new Error("User is not an admin.");
+                    }
+
+                    // Update state with new info
                     setIsAdmin(true);
+                    setAdminData(newAdminData.data() as AdminData);
 
                     // Get all attn entries
                     const allAttnSnap = await getDocs(collection(db, "attendance"));
@@ -54,6 +69,7 @@ export default function AttendanceAdmin() {
 
                     setAllAttnDocs(tmpAttnDocs);
                 } catch (e) {
+                    // Will error out if they don't have permissions (aka NOT ADMIN!!)
                     setIsAdmin(false);
                 }
             } else {
@@ -81,7 +97,8 @@ export default function AttendanceAdmin() {
             if (allAttnDocs.length) {
                 return (
                     <div className='flex flex-col flex-grow p-12' key="attendance-admin-index">
-                        <h1 className='text-3xl font-semibold text-white text-center mb-6'>Attendance Tracker</h1>
+                        <h1 className='text-3xl font-semibold text-white text-center'>Attendance Tracker</h1>
+                        <p className='text-lg text-gray-200 text-center mb-6'>Signed in as {adminData?.name} ({adminData?.studentNumber}@pdsb.net)</p>
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                             {allAttnDocs.map((data) => {
                                 const meetingDate = new Date(data.date.seconds * 1000);
