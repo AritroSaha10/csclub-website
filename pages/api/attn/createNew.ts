@@ -44,7 +44,7 @@ export default async function handler(
     const attnDateRaw = req.body.attn_date as number;
 
     // Make sure they provide a valid number
-    if (attnDateRaw == NaN) {
+    if (attnDateRaw === NaN || attnDateRaw === undefined) {
         res.status(400).end();
         return;
     }
