@@ -1,11 +1,19 @@
 import adminAuth from 'util/firebase/admin/auth';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import adminFirestore from 'util/firebase/admin/db';
 
 import { uuidv4 } from '@firebase/util';
 import { Timestamp } from 'firebase-admin/firestore';
 
+/**
+ * All codes:
+ * 10 -> Successful.
+ * 
+ * 22 -> UID is invalid.
+ * 23 -> User is not an admin.
+ * 24 -> Invalid timestamp.
+ * 25 -> Proposed timestamp should be after the current date.
+ */
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
@@ -36,7 +44,7 @@ export default async function handler(
 
     if (!adminDocSnap.exists) {
         // User is not an admin, don't allow them to do anything
-        res.status(403).end();
+        res.status(403).json({ success: false, code: 23 });
         return;
     }
 
@@ -45,7 +53,7 @@ export default async function handler(
 
     // Make sure they provide a valid number
     if (attnDateRaw === NaN || attnDateRaw === undefined) {
-        res.status(400).end();
+        res.status(400).json({ success: false, code: 24 });
         return;
     }
 
@@ -54,7 +62,7 @@ export default async function handler(
 
     // Proposed date must be after current date
     if (Date.now() > attnDate.getTime()) {
-        res.status(400).end();
+        res.status(400).json({ success: false, code: 25 });
         return;
     }
     
@@ -75,5 +83,5 @@ export default async function handler(
     });
 
     // Send response to user
-    res.status(201).end();
+    res.status(201).json({ success: true, code: 10, ref: newAttnDocRef.id });
 }
