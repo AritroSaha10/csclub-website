@@ -105,13 +105,13 @@ export default async function handler(
 
     // Check whether delta is larger than an hour
     // Only stop them if they're not filing an excused absence
-    if (timeDelta >= 60 * 60 && !isExcusedAbsence) {
+    if (timeDelta >= 60 * 15 && !isExcusedAbsence) {
         console.warn(`User ${studentNumber} attempted to sign-in after ${timeDelta} seconds. Ignoring...`);
         res.status(403).json({ success: false, code: 20 });
         return;
     } 
     // Don't allow people to file excused absence before one hour of meeting
-    else if (timeDeltaNoAbs >= -60 * 60 && isExcusedAbsence) {
+    else if (timeDeltaNoAbs >= -60 * 15 && isExcusedAbsence) {
         console.warn(`User ${studentNumber} attempted to file excused absence after ${timeDelta} seconds of start of meeting. Ignoring...`);
         res.status(403).json({ success: false, code: 21 });
         return;
