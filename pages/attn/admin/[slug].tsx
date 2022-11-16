@@ -218,6 +218,12 @@ export default function AttendanceAdmin({ attnId }: { attnId: string }) {
                                             <p className="text-md text-gray-300">
                                                 <span className='font-semibold'>Submission time:</span> {timeString}
                                             </p>
+
+                                            {data.excused_reason && (
+                                                <p className="text-md text-gray-300 break-words">
+                                                    <span className='font-semibold'>Reason:</span> {data.excused_reason}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 )
