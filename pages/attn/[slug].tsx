@@ -128,12 +128,15 @@ const AttendancePage: NextPage<PageProps> = ({
     </div>
   );
 
-  const sendAttnRecReq = async (excusedAbsence: boolean, excusedReason?: string) => {
+  const sendAttnRecReq = async (
+    excusedAbsence: boolean,
+    excusedReason?: string
+  ) => {
     setSendingAttn(true);
 
     try {
       // Prepare request body
-      let reqBody: {[key: string]: any} = {
+      let reqBody: { [key: string]: any } = {
         uid: user.uid,
         attn_id: attnId,
         excused_absence: !!excusedAbsence,
@@ -273,8 +276,15 @@ const AttendancePage: NextPage<PageProps> = ({
                             );
 
                             // Get reason, validate
-                            const reason = formData.get("reason-for-absence")?.toString().trim();
-                            if (reason !== undefined && reason.length > 2 && reason.length <= 50) {
+                            const reason = formData
+                              .get("reason-for-absence")
+                              ?.toString()
+                              .trim();
+                            if (
+                              reason !== undefined &&
+                              reason.length > 2 &&
+                              reason.length <= 50
+                            ) {
                               sendAttnRecReq(true, reason);
                             } else {
                               setInvalidReason(true);
@@ -282,29 +292,30 @@ const AttendancePage: NextPage<PageProps> = ({
                           }}
                           noValidate
                         >
-                            <div className="flex flex-wrap gap-2">
-                          <input
-                            className={`rounded-lg py-2 px-3 w-72 sm:w-96 align-middle text-white outline-none focus:ring-2 focus:ring-blue-700 duration-200 bg-white/20 shadow-lg focus:shadow-none ${
-                              isInvalidReason && "ring-1 ring-red-600"
-                            }`}
-                            placeholder="Reason for absence..."
-                            name="reason-for-absence"
-                            onChange={() => setInvalidReason(false)}
-                            maxLength={50}
-                            required
-                          />
+                          <div className="flex flex-wrap gap-2">
+                            <input
+                              className={`rounded-lg py-2 px-3 w-72 sm:w-96 align-middle text-white outline-none focus:ring-2 focus:ring-blue-700 duration-200 bg-white/20 shadow-lg focus:shadow-none ${
+                                isInvalidReason && "ring-1 ring-red-600"
+                              }`}
+                              placeholder="Reason for absence..."
+                              name="reason-for-absence"
+                              onChange={() => setInvalidReason(false)}
+                              maxLength={50}
+                              required
+                            />
 
-                          <button
-                            type="submit"
-                            className="py-2 px-5 bg-yellow-600 hover:bg-yellow-800 duration-150 text-xl font-medium text-white rounded-lg"
-                          >
-                            Confirm
-                          </button>
+                            <button
+                              type="submit"
+                              className="py-2 px-5 bg-yellow-600 hover:bg-yellow-800 duration-150 text-xl font-medium text-white rounded-lg"
+                            >
+                              Confirm
+                            </button>
                           </div>
 
                           {isInvalidReason && (
                             <p className="text-md text-red-500">
-                              Please provide a valid reason for your absences (3-50 characters).
+                              Please provide a valid reason for your absences
+                              (3-50 characters).
                             </p>
                           )}
                         </form>
