@@ -304,7 +304,7 @@ const AttendancePage: NextPage<PageProps> = ({
 
                           {isInvalidReason && (
                             <p className="text-md text-red-500">
-                              Please provide a valid reason for your absences (2-50 characters).
+                              Please provide a valid reason for your absences (3-50 characters).
                             </p>
                           )}
                         </form>

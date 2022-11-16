@@ -25,6 +25,7 @@ interface ExpectedRequestData {
  * 22 -> UID is invalid.
  * 24 -> User is not a JFSS student.
  * 26 -> User has already checked in. 
+ * 27 -> User did not provide a valid reason for an excused absence.
  * 
  * 30 -> Invalid attendance ID.
  */
@@ -60,6 +61,13 @@ export default async function handler(
 
     // Store whether this is an excused absence entry 
     const isExcusedAbsence = !!req.body.excused_absence;
+    const excusedReason = req.body.excused_reason;
+
+    // Excused absence must have excused reason
+    if (isExcusedAbsence && !excusedReason) {
+        res.status(400).json({ success: false, code: 27 });
+        return;
+    }
 
     // Get user object from UID
     let userInfo: UserRecord;
@@ -141,7 +149,8 @@ export default async function handler(
         "student_number": studentNumber,
         "time": Timestamp.now(),
         "late": isLate,
-        "excused_absence": isExcusedAbsence
+        "excused_absence": isExcusedAbsence,
+        "excused_reason": isExcusedAbsence ? excusedReason : null,
     })
 
     // Increment absent/late/present counters
