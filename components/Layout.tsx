@@ -10,7 +10,7 @@ import Head from "next/head"
 import Navbar from "./Navbar"
 import Footer from "./Footer"
 
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { ReactElement, ReactNode } from "react";
 
 const transition = { ease: [0.6, 0.01, -0.05, 0.9] };
@@ -50,7 +50,7 @@ export default function Layout({ children, noAnim }: { children: ReactNode, noAn
 
             <Navbar />
 
-            <motion.div
+            <m.div
                 initial={noAnim ? {} : contentVariants.initial}
                 animate={noAnim ? {} : contentVariants.animate}
                 exit={noAnim ? {} : contentVariants.exit}
@@ -58,7 +58,7 @@ export default function Layout({ children, noAnim }: { children: ReactNode, noAn
                 className="flex-grow flex flex-col"
             >
                 {children}
-            </motion.div>
+            </m.div>
 
             <Footer />
         </div>

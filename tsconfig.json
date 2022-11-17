@@ -22,7 +22,8 @@
       "@public": ["public/*"],
       "@util": ["util/*"],
       "@firebase": ["util/firebase/*"],
-      "@styles": ["styles/*"]
+      "@styles": ["styles/*"],
+      "@media": ["public/images/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

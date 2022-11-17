@@ -1,7 +1,8 @@
 import TitleHead from 'components/TitleHead'
 import Link from 'next/link'
 import type { NextPage } from 'next'
-import Hero from 'components/Home/Hero'
+import Hero from "components/Home/Hero"
+import About from 'components/Home/About'
 
 const Home: NextPage = () => {
   return (
@@ -9,6 +10,7 @@ const Home: NextPage = () => {
       <TitleHead name="Home" />
 
       <Hero />
+      <About />
 
       <div className='p-8 py-16'>
         <h1 className="text-4xl text-center mb-4 font-semibold text-white">
