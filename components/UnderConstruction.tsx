@@ -6,7 +6,7 @@ export default function UnderConstruction() {
             </h1>
 
             <p className="text-xl text-center mb-4 text-gray-700">
-                Sorry about the inconvienence, but this website hasn&apos;t been built yet.
+                Sorry about the inconvienence, but this section hasn&apos;t been fully built yet.
                 Feel free to check out the other pages using the navigation bar at the
                 top.
             </p>

@@ -26,7 +26,7 @@ export default function About() {
                     <a 
                         className="group mt-4 bg-yellow-300 text-black font-semibold py-2 px-4 rounded-lg text-lg hover:bg-yellow-400 duration-75"
                     >
-                        View our Archive <span className="group-hover:ml-2 duration-150 transition-all">→</span>
+                        View our Archive <span className="group-hover:ml-1 duration-150 transition-all">→</span>
                     </a>
                 </Link>
             </m.div>
