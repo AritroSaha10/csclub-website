@@ -12,6 +12,7 @@ const Home: NextPage = () => {
       <Hero />
       <About />
 
+      {/*
       <div className='p-8 py-16'>
         <h1 className="text-4xl text-center mb-4 font-semibold text-white">
           Under Construction <span className="font-normal">🔨</span>
@@ -32,6 +33,7 @@ const Home: NextPage = () => {
           .
         </p>
       </div>
+  */}
     </div>
   )
 }

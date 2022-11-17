@@ -4,7 +4,7 @@ import { m } from "framer-motion"
 
 import { fadeFromVariants, Direction } from "util/anim/fadeFrom"
 
-import Logo from "public/images/csclub-logo.png"
+import Logo from "public/images/random-coding-pic.jpg"
 import Link from "next/link"
 
 export default function About() {
@@ -32,13 +32,13 @@ export default function About() {
             </m.div>
             
             <m.div 
-                className="flex p-0 m-0 w-1/2 md:w-1/4"
+                className="flex p-0 m-0 w-1/2"
                 variants={fadeFromVariants(Direction.BOTTOM, 1, 0, 30)}
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true }}
             >
-                <Image className="rounded-lg" src={Logo} alt="Image" objectFit="cover" objectPosition="center" width={540} height={540} quality={100} placeholder="blur" />
+                <Image className="rounded-lg" src={Logo} alt="Image" objectFit="cover" objectPosition="center" width={900} height={540} quality={100} placeholder="blur" />
             </m.div>
         </section>
     )
