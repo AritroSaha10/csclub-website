@@ -4,6 +4,14 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: ['lh3.googleusercontent.com']
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/fakeapi/:path*",
+        destination: "https://testcsclub-project-default-rtdb.firebaseio.com/:path*"
+      }
+    ]
   }
 }
 
